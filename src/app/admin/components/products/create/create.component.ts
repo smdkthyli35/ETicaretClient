@@ -33,12 +33,28 @@ export class CreateComponent extends BaseComponent {
     create_product.name = name.value;
     create_product.price = parseInt(price.value);
     create_product.stock = parseFloat(stock.value);
+
+    if(!name.value) {
+      this.alertify.message('Lütfen ürün adını giriniz.', {
+        dismissOthers: true,
+        messageType: MessageType.Error,
+        position: Position.TopRight,
+      });
+      return;
+    }
+    
     this.productService.create(create_product, () => {
       this.hideSpinner(SpinnerType.BallAtom);
       this.alertify.message('Ürün başarıyla eklendi.', {
         dismissOthers: true,
         messageType: MessageType.Success,
         position: Position.TopRight,
+      });
+    }, errorMessage => {
+      this.alertify.message(errorMessage, {
+        dismissOthers: true,
+        messageType: MessageType.Error,
+        position: Position.TopRight
       });
     });
   }
