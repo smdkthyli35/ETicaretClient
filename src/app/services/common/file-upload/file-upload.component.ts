@@ -12,6 +12,11 @@ import {
   ToastrMessageType,
   ToastrPosition,
 } from '../../ui/custom-toastr.service';
+import { DialogService } from '../dialog.service';
+import {
+  FileUploadDialogComponent,
+  FileUploadDialogState,
+} from 'src/app/dialogs/file-upload-dialog/file-upload-dialog.component';
 
 @Component({
   selector: 'app-file-upload',
@@ -22,7 +27,8 @@ export class FileUploadComponent {
   constructor(
     private httpClientService: HttpClientService,
     private alertifyService: AlertifyService,
-    private toastrService: CustomToastrService
+    private toastrService: CustomToastrService,
+    private dialogService: DialogService
   ) {}
 
   public files: NgxFileDropEntry[];
@@ -37,7 +43,11 @@ export class FileUploadComponent {
       });
     }
 
-    this.httpClientService
+    this.dialogService.openDialog({
+      componentType: FileUploadDialogComponent,
+      data: FileUploadDialogState.Yes,
+      afterClosed: () => {
+        this.httpClientService
       .post(
         {
           controller: this.options.controller,
@@ -81,6 +91,8 @@ export class FileUploadComponent {
           }
         }
       );
+      },
+    });
   }
 }
 
