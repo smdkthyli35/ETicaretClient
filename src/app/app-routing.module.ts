@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './admin/layout/layout.component';
 import { DashboardComponent } from './admin/components/dashboard/dashboard.component';
 import { HomeComponent } from './ui/components/home/home.component';
+import { authGuard } from './guards/common/auth.guard';
 
 const routes: Routes = [
   {
@@ -12,6 +13,7 @@ const routes: Routes = [
       {
         path: '',
         component: DashboardComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'customers',
@@ -19,6 +21,7 @@ const routes: Routes = [
           import('./admin/components/customers/customers.module').then(
             (module) => module.CustomersModule
           ),
+        canActivate: [authGuard]
       },
       {
         path: 'products',
@@ -26,6 +29,7 @@ const routes: Routes = [
           import('./admin/components/products/products.module').then(
             (module) => module.ProductsModule
           ),
+        canActivate: [authGuard]
       },
       {
         path: 'orders',
@@ -33,8 +37,10 @@ const routes: Routes = [
           import('./admin/components/orders/orders.module').then(
             (module) => module.OrdersModule
           ),
+        canActivate: [authGuard]
       },
     ],
+    canActivate: [authGuard]
   },
   { path: '', component: HomeComponent },
   {
@@ -71,4 +77,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
