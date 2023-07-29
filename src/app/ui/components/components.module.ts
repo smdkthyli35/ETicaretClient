@@ -8,6 +8,8 @@ import { LoginModule } from './login/login.module';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, BasketsModule, ProductsModule, HomeModule, RegisterModule, LoginModule],
+  imports: [CommonModule, BasketsModule, ProductsModule, HomeModule, RegisterModule,
+    // LoginModule
+  ],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }
