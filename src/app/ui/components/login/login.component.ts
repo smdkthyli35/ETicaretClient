@@ -1,4 +1,4 @@
-import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
+import { FacebookLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -21,11 +21,19 @@ export class LoginComponent extends BaseComponent {
     socialAuthService.authState.subscribe(async (user: SocialUser) => {
       console.log(user);
       this.showSpinner(SpinnerType.BallAtom);
-      await this.userService.googleLogin(user, () => {
-        this.authService.identityCheck();
-        this.hideSpinner(SpinnerType.BallAtom);
-      });
+
+      switch (user.provider) {
+        case "GOOGLE":
+          await this.userService.googleLogin(user);
+          break;
+        case "FACEBOOK":
+          await this.userService.facebookLogin(user);
+          break;
+      }
     });
+
+    this.authService.identityCheck();
+    this.hideSpinner(SpinnerType.BallAtom);
   }
 
   async login(userNameOrEmail: string, password: string) {
@@ -39,6 +47,10 @@ export class LoginComponent extends BaseComponent {
       });
       this.hideSpinner(SpinnerType.BallAtom);
     });
+  }
+
+  facebookLogin() {
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 }
 
