@@ -20,59 +20,6 @@ export class UserService {
 
     return await firstValueFrom(observable) as Create_User;
   }
-
-  async login(userNameOrEmail: string, password: string, callBackFuncion?: () => void): Promise<any> {
-    const observable: Observable<any | TokenResponse> = this.httpClientService.post<any | TokenResponse>({
-      controller: "users",
-      action: 'login'
-    }, { userNameOrEmail, password })
-
-    const tokenResponse: TokenResponse = await firstValueFrom(observable) as TokenResponse;
-    if (tokenResponse)
-      localStorage.setItem("accessToken", tokenResponse.token.accessToken);
-
-    this.toastrService.message("Kullanıcı giriş başarılı", "Başarılı", {
-      messageType: ToastrMessageType.Success,
-      position: ToastrPosition.TopRight
-    });
-    callBackFuncion();
-  }
-
-  async googleLogin(user: SocialUser, callBackFuncion?: () => void): Promise<any> {
-    const observable: Observable<SocialUser | TokenResponse> = this.httpClientService.post<SocialUser | TokenResponse>({
-      action: "google-login",
-      controller: "users"
-    }, user);
-
-    const tokenResponse: TokenResponse = await firstValueFrom(observable) as TokenResponse;
-    if (tokenResponse) {
-      localStorage.setItem("accessToken", tokenResponse.token.accessToken);
-      this.toastrService.message("Google üzerinden giriş başarıyla sağlandı", "Google Girişi Başarılı!", {
-        messageType: ToastrMessageType.Success,
-        position: ToastrPosition.TopRight
-      });
-    }
-
-    callBackFuncion();
-  }
-
-  async facebookLogin(user: SocialUser, callBackFuncion?: () => void): Promise<any> {
-    const observable: Observable<SocialUser | TokenResponse> = this.httpClientService.post<SocialUser | TokenResponse>({
-      action: "facebook-login",
-      controller: "users"
-    }, user);
-
-    const tokenResponse: TokenResponse = await firstValueFrom(observable) as TokenResponse;
-    if (tokenResponse) {
-      localStorage.setItem("accessToken", tokenResponse.token.accessToken);
-      this.toastrService.message("Facebook üzerindne giriş başarıyla sağlandı", "Facebook Giriş Başarılı!", {
-        messageType: ToastrMessageType.Success,
-        position: ToastrPosition.TopRight
-      });
-    }
-
-    callBackFuncion();
-  }
 }
 
 
