@@ -9,31 +9,31 @@ import { Observable, firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private httpClientService: HttpClientService) {}
+  constructor(private httpClientService: HttpClientService) { }
 
   create(product: Create_Product, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     this.httpClientService.post({
-          controller: 'products',
-        },product).subscribe({
-        next: () => {
-          successCallBack();
-        },
-        error: (errorResponse: HttpErrorResponse) => {
-          const _error: Array<{ key: string; value: Array<string> }> =
-            errorResponse.error;
-          let message = '';
-          _error.forEach((v, index) => {
-            v.value.forEach((_v, index) => {
-              message += `${_v}<br>`;
-            });
+      controller: 'products',
+    }, product).subscribe({
+      next: () => {
+        successCallBack();
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        const _error: Array<{ key: string; value: Array<string> }> =
+          errorResponse.error;
+        let message = '';
+        _error.forEach((v, index) => {
+          v.value.forEach((_v, index) => {
+            message += `${_v}<br>`;
           });
-          errorCallBack(message);
-        }
-      });
+        });
+        errorCallBack(message);
+      }
+    });
   }
 
-  async read(page: number = 0, size: number = 5,successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{totalCount: number, products: List_Product[]}> {
-    const promiseData: Promise<{totalCount: number, products: List_Product[]}> = this.httpClientService.get<{totalCount: number, products: List_Product[]}>({
+  async read(page: number = 0, size: number = 5, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalProductCount: number, products: List_Product[] }> {
+    const promiseData: Promise<{ totalProductCount: number, products: List_Product[] }> = this.httpClientService.get<{ totalProductCount: number, products: List_Product[] }>({
       controller: 'products',
       queryString: `page=${page}&size=${size}`
     }).toPromise();
@@ -53,5 +53,16 @@ export class ProductService {
     }, id);
 
     await firstValueFrom(deleteObservable);
+  }
+
+  async changeShowcaseImage(imageId: string, productId: string, successCallBack: () => void): Promise<void> {
+    const changeShowcaseImageObservable = this.httpClientService.get({
+      controller: 'products',
+      action: 'ChangeShowcase',
+      queryString: `imageId=${imageId}&productId=${productId}`
+    });
+
+    await firstValueFrom(changeShowcaseImageObservable);
+    successCallBack();
   }
 }
