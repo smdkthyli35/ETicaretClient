@@ -13,7 +13,7 @@ const routes: Routes = [
       {
         path: '',
         component: DashboardComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
       },
       {
         path: 'customers',
@@ -21,7 +21,7 @@ const routes: Routes = [
           import('./admin/components/customers/customers.module').then(
             (module) => module.CustomersModule
           ),
-        canActivate: [authGuard]
+        canActivate: [authGuard],
       },
       {
         path: 'products',
@@ -29,7 +29,7 @@ const routes: Routes = [
           import('./admin/components/products/products.module').then(
             (module) => module.ProductsModule
           ),
-        canActivate: [authGuard]
+        canActivate: [authGuard],
       },
       {
         path: 'orders',
@@ -37,10 +37,10 @@ const routes: Routes = [
           import('./admin/components/orders/orders.module').then(
             (module) => module.OrdersModule
           ),
-        canActivate: [authGuard]
+        canActivate: [authGuard],
       },
     ],
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   { path: '', component: HomeComponent },
   {
@@ -52,6 +52,13 @@ const routes: Routes = [
   },
   {
     path: 'product',
+    loadChildren: () =>
+      import('./ui/components/products/products.module').then(
+        (module) => module.ProductsModule
+      ),
+  },
+  {
+    path: 'product/:pageNo',
     loadChildren: () =>
       import('./ui/components/products/products.module').then(
         (module) => module.ProductsModule
@@ -77,4 +84,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
